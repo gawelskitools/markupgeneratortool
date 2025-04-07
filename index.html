@@ -15,7 +15,7 @@
   </style>
 </head>
 <body>
-  <h1>Analyse-Tool – Ausgabe als Markup</h1>
+  <h1>Analyse-Tool – Ausgabe als Markup 002</h1>
 
   <label for="beitragstitel">Beitragstitel:</label>
   <input type="text" id="beitragstitel" placeholder="Beitragstitel eingeben" />
@@ -85,6 +85,7 @@
   <textarea id="finalMarkup" placeholder="Hier erscheint das finale Markup..."></textarea>
   <div class="button-group">
     <button onclick="copyToClipboard()">Kopieren</button>
+    <button onclick="downloadMarkup()">Als Textdatei speichern</button>
     <button onclick="generateMarkupOutput()">Markup generieren</button>
   </div>
 
@@ -119,22 +120,22 @@
   &lt;analyseart typ="transkript" gewichtung="${weightT}" zitate-erlaubt="${zitatT}"&gt;
     &lt;text&gt;${transcript}&lt;/text&gt;
     &lt;analyse&gt;
-      &lt;schritt nummer="2"&gt;[Fakten]&lt;/schritt&gt;
-      &lt;schritt nummer="3"&gt;[Thema]&lt;/schritt&gt;
-      &lt;schritt nummer="4"&gt;[Absicht]&lt;/schritt&gt;
-      &lt;schritt nummer="5"&gt;[Personen]&lt;/schritt&gt;
-      &lt;schritt nummer="6"&gt;[Prognose]&lt;/schritt&gt;
+      &lt;schritt nummer="2"&gt;&lt;/schritt&gt;
+      &lt;schritt nummer="3"&gt;&lt;/schritt&gt;
+      &lt;schritt nummer="4"&gt;&lt;/schritt&gt;
+      &lt;schritt nummer="5"&gt;&lt;/schritt&gt;
+      &lt;schritt nummer="6"&gt;&lt;/schritt&gt;
     &lt;/analyse&gt;
   &lt;/analyseart&gt;
 
   &lt;analyseart typ="anmoderation" gewichtung="${weightA}" zitate-erlaubt="${zitatA}"&gt;
     &lt;text&gt;${anmoderation}&lt;/text&gt;
     &lt;analyse&gt;
-      &lt;schritt nummer="2"&gt;[Fakten]&lt;/schritt&gt;
-      &lt;schritt nummer="3"&gt;[Thema]&lt;/schritt&gt;
-      &lt;schritt nummer="4"&gt;[Absicht]&lt;/schritt&gt;
-      &lt;schritt nummer="5"&gt;[Personen]&lt;/schritt&gt;
-      &lt;schritt nummer="6"&gt;[Prognose]&lt;/schritt&gt;
+      &lt;schritt nummer="2"&gt;&lt;/schritt&gt;
+      &lt;schritt nummer="3"&gt;&lt;/schritt&gt;
+      &lt;schritt nummer="4"&gt;&lt;/schritt&gt;
+      &lt;schritt nummer="5"&gt;&lt;/schritt&gt;
+      &lt;schritt nummer="6"&gt;&lt;/schritt&gt;
     &lt;/analyse&gt;
   &lt;/analyseart&gt;
 &lt;/online-ausgabe&gt;`;
@@ -144,6 +145,18 @@
 
     function copyToClipboard() {
       navigator.clipboard.writeText(document.getElementById("finalMarkup").value);
+    }
+
+    function downloadMarkup() {
+      const blob = new Blob([document.getElementById("finalMarkup").value], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "markup-ausgabe.txt";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     }
   </script>
 </body>
