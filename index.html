@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Analyse-Tool – Markup-Ausgabe</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 960px; margin: auto; padding: 20px; }
+    textarea, select, input[type="text"] {
+      width: 100%; margin-top: 5px; padding: 6px; font-family: monospace;
+    }
+    textarea { height: 160px; }
+    .analyse-block { margin-bottom: 30px; border-top: 1px solid #ccc; padding-top: 20px; }
+    .button-group { margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap; }
+    h2 { margin-top: 40px; }
+  </style>
+</head>
+<body>
+  <h1>Analyse-Tool – Ausgabe als Markup</h1>
+
+  <label for="beitragstitel">Beitragstitel:</label>
+  <input type="text" id="beitragstitel" placeholder="Beitragstitel eingeben" />
+
+  <label for="ressort">Ressort:</label>
+  <select id="ressort">
+    <option value="">– Bitte wählen –</option>
+    <option>Politik</option>
+    <option>Wirtschaft</option>
+    <option>Kultur</option>
+    <option>Sport</option>
+    <option>Wissen</option>
+    <option>Gesellschaft</option>
+    <option>Panorama</option>
+    <option>Digitales</option>
+    <option>Verbraucher</option>
+    <option>Gesundheit</option>
+    <option>Bildung</option>
+    <option>Umwelt</option>
+    <option>Verkehr</option>
+    <option>Justiz</option>
+    <option>Ausland</option>
+  </select>
+
+  <label for="tags">Tags:</label>
+  <input type="text" id="tags" placeholder="Tags kommagetrennt eingeben" />
+
+  <div class="analyse-block">
+    <h2>Transkript</h2>
+    <label for="transkript">Text:</label>
+    <textarea id="transkript" placeholder="Transkript eingeben..."></textarea>
+    <label>Zitate erlaubt?</label>
+    <select id="zitateTranskript">
+      <option value="true">Ja</option>
+      <option value="false" selected>Nein</option>
+    </select>
+    <label>Gewichtung:</label>
+    <select id="weightTranskript">
+      <option value="0">0 %</option>
+      <option value="25">25 %</option>
+      <option value="50">50 %</option>
+      <option value="75" selected>75 %</option>
+      <option value="100">100 %</option>
+    </select>
+  </div>
+
+  <div class="analyse-block">
+    <h2>Anmoderation</h2>
+    <label for="anmoderation">Text:</label>
+    <textarea id="anmoderation" placeholder="Anmoderation eingeben..."></textarea>
+    <label>Zitate erlaubt?</label>
+    <select id="zitateAnmoderation">
+      <option value="true">Ja</option>
+      <option value="false" selected>Nein</option>
+    </select>
+    <label>Gewichtung:</label>
+    <select id="weightAnmoderation">
+      <option value="0">0 %</option>
+      <option value="25" selected>25 %</option>
+      <option value="50">50 %</option>
+      <option value="75">75 %</option>
+      <option value="100">100 %</option>
+    </select>
+  </div>
+
+  <h2>Finale Markup-Ausgabe</h2>
+  <textarea id="finalMarkup" placeholder="Hier erscheint das finale Markup..."></textarea>
+  <div class="button-group">
+    <button onclick="copyToClipboard()">Kopieren</button>
+    <button onclick="generateMarkupOutput()">Markup generieren</button>
+  </div>
+
+  <script>
+    function escapeMarkup(str) {
+      return str.replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+    }
+
+    function generateMarkupOutput() {
+      const isoTime = new Date().toISOString();
+      const titel = escapeMarkup(document.getElementById("beitragstitel").value);
+      const ressort = escapeMarkup(document.getElementById("ressort").value);
+      const tags = escapeMarkup(document.getElementById("tags").value);
+      const transcript = escapeMarkup(document.getElementById("transkript").value);
+      const zitatT = document.getElementById("zitateTranskript").value;
+      const weightT = document.getElementById("weightTranskript").value;
+      const anmoderation = escapeMarkup(document.getElementById("anmoderation").value);
+      const zitatA = document.getElementById("zitateAnmoderation").value;
+      const weightA = document.getElementById("weightAnmoderation").value;
+
+      const markup = `&lt;!-- MARKUP-ANALYSEBLOCK --&gt;
+&lt;online-ausgabe version="1.0"&gt;
+  &lt;quelle&gt;
+    &lt;zeitstempel&gt;${isoTime}&lt;/zeitstempel&gt;
+    &lt;titel&gt;${titel}&lt;/titel&gt;
+    &lt;ressort&gt;${ressort}&lt;/ressort&gt;
+    &lt;tags&gt;${tags}&lt;/tags&gt;
+  &lt;/quelle&gt;
+  
+  &lt;analyseart typ="transkript" gewichtung="${weightT}" zitate-erlaubt="${zitatT}"&gt;
+    &lt;text&gt;${transcript}&lt;/text&gt;
+    &lt;analyse&gt;
+      &lt;schritt nummer="2"&gt;[Fakten]&lt;/schritt&gt;
+      &lt;schritt nummer="3"&gt;[Thema]&lt;/schritt&gt;
+      &lt;schritt nummer="4"&gt;[Absicht]&lt;/schritt&gt;
+      &lt;schritt nummer="5"&gt;[Personen]&lt;/schritt&gt;
+      &lt;schritt nummer="6"&gt;[Prognose]&lt;/schritt&gt;
+    &lt;/analyse&gt;
+  &lt;/analyseart&gt;
+
+  &lt;analyseart typ="anmoderation" gewichtung="${weightA}" zitate-erlaubt="${zitatA}"&gt;
+    &lt;text&gt;${anmoderation}&lt;/text&gt;
+    &lt;analyse&gt;
+      &lt;schritt nummer="2"&gt;[Fakten]&lt;/schritt&gt;
+      &lt;schritt nummer="3"&gt;[Thema]&lt;/schritt&gt;
+      &lt;schritt nummer="4"&gt;[Absicht]&lt;/schritt&gt;
+      &lt;schritt nummer="5"&gt;[Personen]&lt;/schritt&gt;
+      &lt;schritt nummer="6"&gt;[Prognose]&lt;/schritt&gt;
+    &lt;/analyse&gt;
+  &lt;/analyseart&gt;
+&lt;/online-ausgabe&gt;`;
+
+      document.getElementById("finalMarkup").value = markup;
+    }
+
+    function copyToClipboard() {
+      navigator.clipboard.writeText(document.getElementById("finalMarkup").value);
+    }
+  </script>
+</body>
+</html>
