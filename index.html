@@ -8,14 +8,14 @@
     textarea, select, input[type="text"] {
       width: 100%; margin-top: 5px; padding: 6px; font-family: monospace;
     }
-    textarea { height: 160px; }
+    textarea { height: 180px; }
     .analyse-block { margin-bottom: 30px; border-top: 1px solid #ccc; padding-top: 20px; }
     .button-group { margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap; }
     h2 { margin-top: 40px; }
   </style>
 </head>
 <body>
-  <h1>Analyse-Tool – Ausgabe als Markup 002</h1>
+  <h1>Analyse-Tool – Ausgabe als Markup 004</h1>
 
   <label for="beitragstitel">Beitragstitel:</label>
   <input type="text" id="beitragstitel" placeholder="Beitragstitel eingeben" />
@@ -108,15 +108,22 @@
       const zitatA = document.getElementById("zitateAnmoderation").value;
       const weightA = document.getElementById("weightAnmoderation").value;
 
-      const markup = `&lt;!-- MARKUP-ANALYSEBLOCK --&gt;
+      const markup = `&lt;!-- MARKUP-PROMPTCHAIN --&gt;
 &lt;online-ausgabe version="1.0"&gt;
+  &lt;verarbeitung automatisch="true" /&gt;
+  &lt;ausgabe-format&gt;prompt-fuer-redaktionelle-online-verwertung&lt;/ausgabe-format&gt;
+  &lt;anweisung-fuer-ki&gt;
+    &lt;beschreibung&gt;Analysiere die Textquellen, fülle alle Analyse-Schritte (2–6) aus, generiere &lt;ueberschrift&gt;, &lt;kurzbeschreibung&gt;, &lt;keywords&gt;, &lt;themen&gt; automatisch. Füge am Ende eine Vorschau unter &lt;vorschau&gt; ein. Keine Rückfragen, keine CDATA, reine Ausgabe.&lt;/beschreibung&gt;
+    &lt;ausfuehrung&gt;verarbeitung-jetzt&lt;/ausfuehrung&gt;
+  &lt;/anweisung-fuer-ki&gt;
+
   &lt;quelle&gt;
     &lt;zeitstempel&gt;${isoTime}&lt;/zeitstempel&gt;
     &lt;titel&gt;${titel}&lt;/titel&gt;
     &lt;ressort&gt;${ressort}&lt;/ressort&gt;
     &lt;tags&gt;${tags}&lt;/tags&gt;
   &lt;/quelle&gt;
-  
+
   &lt;analyseart typ="transkript" gewichtung="${weightT}" zitate-erlaubt="${zitatT}"&gt;
     &lt;text&gt;${transcript}&lt;/text&gt;
     &lt;analyse&gt;
@@ -138,6 +145,28 @@
       &lt;schritt nummer="6"&gt;&lt;/schritt&gt;
     &lt;/analyse&gt;
   &lt;/analyseart&gt;
+
+  &lt;editorial-metadata&gt;
+    &lt;ueberschrift max-laenge="60"&gt;&lt;/ueberschrift&gt;
+    &lt;kurzbeschreibung max-laenge="150"&gt;&lt;/kurzbeschreibung&gt;
+    &lt;seo&gt;
+      &lt;keywords max="10"&gt;
+        &lt;keyword&gt;&lt;/keyword&gt;
+      &lt;/keywords&gt;
+      &lt;themen max="5"&gt;
+        &lt;thema&gt;&lt;/thema&gt;
+      &lt;/themen&gt;
+    &lt;/seo&gt;
+  &lt;/editorial-metadata&gt;
+
+  &lt;vorschau&gt;
+    &lt;text&gt;
+Überschrift:
+Kurzbeschreibung:
+Keywords:
+Themen:
+    &lt;/text&gt;
+  &lt;/vorschau&gt;
 &lt;/online-ausgabe&gt;`;
 
       document.getElementById("finalMarkup").value = markup;
